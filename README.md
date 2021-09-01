@@ -13,12 +13,17 @@ We are assuming an Ubuntu 20.4 system with a clean installation, and first go ah
     nvidia-smi
     apt install nvidia-cuda-toolkit
 
-## Kubernetes
+## Setup tools
+
 First we have to install Kubernetes (we might also use K3S) on a base image. 
+
+### Install Docker
 
 Let's install Docker. We could also use `containerd` with Kubernetes.
 
-    apt install docker.io -y
+    apt install docker.io -y    
+
+### Install Kubernetes
   
 Install the Kubernetes toolset.
 
@@ -56,3 +61,56 @@ This might take a couple of minutes but once finished you should see following m
     kubeadm join 192.168.1.103:6443 --token ej7ckt.uof7o2iplqf0r2up \
         --discovery-token-ca-cert-hash sha256:9cbcc00d34be2dbd605174802d9e52fbcdd617324c237bf58767b369fa586209
   
+      
+### Install Nivida Docker
+
+To enable NVidia on Kubernetes a couple of things will need to be changes (more info here 
+https://github.com/NVIDIA/k8s-device-plugin).
+
+    distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+       && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \
+       && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+       
+       apt-get update
+       apt-get install -y nvidia-docker2
+       systemctl restart docker
+       docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi
+   
+Make an additional modification to the `daemon.json` of Docker.
+
+        nano /etc/docker/daemon.json
+        
+Make sure the `.json` file is aligned with below config.
+
+    {
+        "default-runtime": "nvidia",
+        "runtimes": {
+            "nvidia": {
+                "path": "/usr/bin/nvidia-container-runtime",
+                "runtimeArgs": []
+            }
+        }
+    }
+
+## Enable NVidia k8s plugin
+  
+    kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.9.0/nvidia-device-plugin.yml
+
+## Create a GPU workload (pod/deployment)
+
+When creating a new pod or deployment, you assign a number of GPU's to the workload, this will make sure the workload is scheduled on a node which has one or more GPUs available.
+
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: kerberoshub-ml
+    spec:
+      containers:
+        - name: kerberoshub-ml
+          image: kerberos/yolo34py-gpu
+          resources:
+            limits:
+              nvidia.com/gpu: 1 # requesting 2 GPUs
+
+
+
