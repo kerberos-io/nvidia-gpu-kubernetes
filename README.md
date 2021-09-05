@@ -1,6 +1,6 @@
-# Kubeflow
+# NVIDIA operator on Kubernetes with Kerberos Vault
 
-Machine learning with Kerberos on Kubernetes. A Kubeflow example that integrates with Kerberos Vault.
+Machine learning using the NVIDIA GPU operator with Kerberos Vault on Kubernetes. An example that integrates and scales your Machine learning using Kerberos Vault and GPU Kubernetes Cluster.
 
 ## NVidia Drivers
 We are assuming an Ubuntu 20.4 system with a clean installation, and first go ahead with installating the NVIDIA drivers and CUDA drivers. Check with @Pedro, but do not believe we need to have the CUDA drivers on the host system, they should go into the kubeflow deployments.
@@ -100,17 +100,53 @@ Make sure the `.json` file is aligned with below config.
 
 When creating a new pod or deployment, you assign a number of GPU's to the workload, this will make sure the workload is scheduled on a node which has one or more GPUs available.
 
-    apiVersion: v1
-    kind: Pod
+    apiVersion: apps/v1
+    kind: Deployment
     metadata:
-      name: kerberoshub-ml
+      name: vault-ml
+      labels:
+        app: vault-ml
     spec:
-      containers:
-        - name: kerberoshub-ml
-          image: kerberos/yolo34py-gpu
-          resources:
-            limits:
-              nvidia.com/gpu: 1 # requesting 2 GPUs
+      replicas: 1
+      selector:
+        matchLabels:
+          app: vault-ml
+      template:
+        metadata:
+          labels:
+            app: vault-ml
+        spec:
+          containers:
+            - name: kerberoshub-ml
+              image: kerberos/vault-ml-gpu
+              resources:
+                limits:
+                  nvidia.com/gpu: 1 # requesting a single GPU
+              env:
+                - name: QUEUE_SYSTEM
+                  value: "KAFKA"
+                - name: QUEUE_NAME
+                  value: "kubeflow"
+                - name: QUEUE_TARGET
+                  value: "footages"
+                - name: KAFKA_BROKER
+                  value: "pkc-ldjyd.southamerica:9092"
+                - name: KAFKA_GROUP
+                  value: "group"
+                - name: KAFKA_USERNAME
+                  value: "xxx"
+                - name: KAFKA_PASSWORD
+                  value: "xxx"
+                - name: KAFKA_MECHANISM
+                  value: "PLAIN"
+                - name: KAFKA_SECURITY
+                  value: "SASL_SSL"
+                - name: VAULT_API_URL
+                  value: "https://staging.api.vault.kerberos.live"
+                - name: VAULT_ACCESS_KEY
+                  value: "xxx"
+                - name: VAULT_SECRET_KEY
+                  value: "xxx"
 
 
 
