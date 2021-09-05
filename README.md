@@ -1,8 +1,12 @@
 # NVIDIA operator on Kubernetes with Kerberos Vault
 
-Machine learning using the NVIDIA GPU operator with Kerberos Vault on Kubernetes. An example that integrates and scales your Machine learning using Kerberos Vault and GPU Kubernetes Cluster.
+Machine learning using the NVIDIA GPU operator with Kerberos Vault on Kubernetes. Integrate and scale your Machine learning using Kerberos Vault and  a GPU node-based Kubernetes Cluster.
+
+In this example we will show you how you can use [Kerberos Enterprise Agents](https://doc.kerberos.io/enterprise/first-things-first/) and [Kerberos Vault](https://doc.kerberos.io/vault/first-things-first/) to scale your machine learning and video surveillance or analytics landscape. By decoupling your cameras and GPU's using the Kubernetes platform and Kerberos Enterprise you bring real scale into the picture.
 
 ![NVIDIA operator Kerberos Vault](https://user-images.githubusercontent.com/1546779/132137679-33fc02df-085f-47cf-8587-301bd3448e63.png)
+
+The following example 
 
 # Prepare a node to run GPU based deployments
 
