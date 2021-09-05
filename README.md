@@ -6,7 +6,9 @@ In this example we will show you how you can use [Kerberos Enterprise Agents](ht
 
 ![NVIDIA operator Kerberos Vault](https://user-images.githubusercontent.com/1546779/132137679-33fc02df-085f-47cf-8587-301bd3448e63.png)
 
-The following example 
+The following example will show you how to setup a node with one or more GPU's in a Kubernetes Cluster. Afterwards we will deploy a machine learning workload that can recognise pedestrians in one or more recordings. To handle that execution we have a couple of cameras in place (called Kerberos agents) and our open/extensible storage platform called Kerberos Vault.
+
+Kerberos Vault receives recordings from one or more (or thousands) of Kerberos agents, and will trigger events through integrations such as Kafka, SQS, etc. Everytime a recording is stored in Kerberos Vault, a real-time message is generated, and a consumer (the workload we have deployed in our cluster) will download the recording and start the interference on one of you GPU based Kubernetes nodes (using the NVIDIA operator). 
 
 # Prepare a node to run GPU based deployments
 
