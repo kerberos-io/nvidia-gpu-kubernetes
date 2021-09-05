@@ -2,9 +2,11 @@
 
 Machine learning using the NVIDIA GPU operator with Kerberos Vault on Kubernetes. An example that integrates and scales your Machine learning using Kerberos Vault and GPU Kubernetes Cluster.
 
-![NV-GPU-Operator-1](https://user-images.githubusercontent.com/1546779/132136901-44d90617-a80a-4933-9eca-bf965622d237.png)
+![NVIDIA operator Kerberos Vault](https://user-images.githubusercontent.com/1546779/132137679-33fc02df-085f-47cf-8587-301bd3448e63.png)
 
 # Prepare a node to run GPU based deployments
+
+![NV-GPU-Operator-1](https://user-images.githubusercontent.com/1546779/132136901-44d90617-a80a-4933-9eca-bf965622d237.png)
 
 To provision GPU worker nodes in a Kubernetes cluster, the following NVIDIA software components are required – the driver, container runtime, device plugin and monitoring. As shown in Figure 1, these components need to be manually provisioned before GPU resources are available to the cluster and also need to be managed during the operation of the cluster. The GPU Operator simplifies both the initial deployment and management of the components by containerizing all the components and using standard Kubernetes APIs for automating and managing these components including versioning and upgrades. The GPU operator is fully open-source and is available [at the NVIDIA GitHub repo](https://github.com/NVIDIA/gpu-operator).
 
