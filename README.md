@@ -4,13 +4,12 @@ Machine learning using the NVIDIA GPU operator with Kerberos Vault on Kubernetes
 
 ![NV-GPU-Operator-1](https://user-images.githubusercontent.com/1546779/132136901-44d90617-a80a-4933-9eca-bf965622d237.png)
 
-# Prepare the node to be able to run GPU based deployments
+# Prepare a node to run GPU based deployments
 
-To provision GPU worker nodes in a Kubernetes cluster, the following NVIDIA software components are required – the driver, container runtime, device plugin and monitoring. As shown in Figure 1, these components need to be manually provisioned before GPU resources are available to the cluster and also need to be managed during the operation of the cluster. The GPU Operator simplifies both the initial deployment and management of the components by containerizing all the components and using standard Kubernetes APIs for automating and managing these components including versioning and upgrades. The GPU operator is fully open-source and is available on our GitHub repo.
+To provision GPU worker nodes in a Kubernetes cluster, the following NVIDIA software components are required – the driver, container runtime, device plugin and monitoring. As shown in Figure 1, these components need to be manually provisioned before GPU resources are available to the cluster and also need to be managed during the operation of the cluster. The GPU Operator simplifies both the initial deployment and management of the components by containerizing all the components and using standard Kubernetes APIs for automating and managing these components including versioning and upgrades. The GPU operator is fully open-source and is available [at the NVIDIA GitHub repo](https://github.com/NVIDIA/gpu-operator).
 
 ![GPU-Operator-Manual-Install-Figure](https://user-images.githubusercontent.com/1546779/132136925-7f7a2c88-7d58-41ba-8b8f-8f72b0af82de.png)
 
-So let's start by installing the drives.
 
 ## NVidia Drivers
 We are assuming an Ubuntu 20.4 system with a clean installation, and first go ahead with installating the NVIDIA drivers and CUDA drivers.
@@ -106,7 +105,7 @@ Make sure the `.json` file is aligned with below config.
   
     kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.9.0/nvidia-device-plugin.yml
 
-## Create a GPU workload (pod/deployment)
+## Create a GPU workload and scale with Kerberos Vault
 
 When creating a new pod or deployment, you assign a number of GPU's to the workload, this will make sure the workload is scheduled on a node which has one or more GPUs available.
 
