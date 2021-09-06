@@ -117,7 +117,9 @@ Make sure the `.json` file is aligned with below config.
 
 ## Create a GPU workload and scale with Kerberos Vault
 
-When creating a new pod or deployment, you assign a number of GPU's to the workload, this will make sure the workload is scheduled on a node which has one or more GPUs available.
+When creating a new pod or deployment, you assign a number of GPU's to the workload, this will make sure the workload is scheduled on a node which has one or more GPUs available. Important to note that below example with request a Docker image from Kerberos.io's private (Gitlab) registry, you will need to make sure to request a license to be able to download it.
+
+Once installed, you will have a machine learning deployment integrated with your Kerberos Vault and Kafka broker. It will start doing interference on your GPU based nodes.
 
     apiVersion: apps/v1
     kind: Deployment
@@ -135,6 +137,8 @@ When creating a new pod or deployment, you assign a number of GPU's to the workl
           labels:
             app: vault-ml
         spec:
+          imagePullSecrets:
+            - name: regcred
           containers:
             - name: kerberoshub-ml
               image: kerberos/vault-ml-gpu
