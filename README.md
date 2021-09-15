@@ -22,7 +22,7 @@ To provision GPU worker nodes in a Kubernetes cluster, the following NVIDIA soft
 
 
 ## NVidia Drivers
-We are assuming an Ubuntu 20.4 system with a clean installation, and first go ahead with installating the NVIDIA drivers and CUDA drivers.
+We are assuming an Ubuntu 20.4 system with a clean installation. First things first, let's go ahead with installing the NVIDIA drivers and CUDA drivers.
 
     sudo -s
     apt install nvidia-driver-455
@@ -34,7 +34,7 @@ We are assuming an Ubuntu 20.4 system with a clean installation, and first go ah
 
 ## Setup tools
 
-First we have to install Kubernetes (we might also use K3S) on a base image. 
+Once we have the NVIDIA drivers installed, we are ready to setup Docker and Kubernetes. Next to that we will enable NVIDIA for Docker and later on we will install the NVIDIA Kubernetes operator.
 
 ### Install Docker
 
@@ -81,10 +81,9 @@ This might take a couple of minutes but once finished you should see following m
         --discovery-token-ca-cert-hash sha256:9cbcc00d34be2dbd605174802d9e52fbcdd617324c237bf58767b369fa586209
   
       
-### Install Nivida Docker
+### Install NVIDIA for Docker
 
-To enable NVidia on Kubernetes a couple of things will need to be changes (more info here 
-https://github.com/NVIDIA/k8s-device-plugin).
+To enable NVIDIA for Docker, [a couple of things will need to be installed](https://github.com/NVIDIA/k8s-device-plugin).
 
     distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
        && curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \
