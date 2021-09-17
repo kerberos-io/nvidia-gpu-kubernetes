@@ -136,11 +136,9 @@ Once installed, you will have a machine learning deployment integrated with your
           labels:
             app: vault-ml
         spec:
-          imagePullSecrets:
-            - name: regcred
           containers:
             - name: kerberoshub-ml
-              image: kerberos/vault-ml-gpu
+              image: kerberos/vault-ml:nvidia
               resources:
                 limits:
                   nvidia.com/gpu: 1 # requesting a single GPU
@@ -148,11 +146,11 @@ Once installed, you will have a machine learning deployment integrated with your
                 - name: QUEUE_SYSTEM
                   value: "KAFKA"
                 - name: QUEUE_NAME
-                  value: "kubeflow"
+                  value: "source_topic" # This is the topic of kafka we will read messages from.
                 - name: QUEUE_TARGET
-                  value: "footages"
+                  value: "target_topic" # Once we processed the recording with ML, we will send results/metadata to a target topic of Kafka.
                 - name: KAFKA_BROKER
-                  value: "pkc-ldjyd.southamerica:9092"
+                  value: "xxx-your-kafka-xxx:9092"
                 - name: KAFKA_GROUP
                   value: "group"
                 - name: KAFKA_USERNAME
@@ -164,15 +162,16 @@ Once installed, you will have a machine learning deployment integrated with your
                 - name: KAFKA_SECURITY
                   value: "SASL_SSL"
                 - name: VAULT_API_URL
-                  value: "https://staging.api.vault.kerberos.live"
+                  value: "https://xxx.api.vault.kerberos.live"
                 - name: VAULT_ACCESS_KEY
                   value: "xxx"
                 - name: VAULT_SECRET_KEY
                   value: "xxx"
+                - name: NUMBER_OF_PREDICTIONS
+                  value: "5"
 
 
-
-The results you will show when inspect the logs of `vault-ml-gpu` is:
+The results you will show when inspect the logs of `vault-ml` is:
 
     {"date": 1630643468, "data": {"probabilities": [[0.5907418131828308], [0.7311708927154541], [0.555280864238739], [0.5144052505493164]], "labels": [["car"], ["truck"], ["truck"], ["car"]], "boxes": [[[298, 36, 398, 79]], [[514, 53, 656, 129]], [[514, 53, 656, 127]], [[315, 101, 351, 125]]]}, "operation": "classification", "events": ["monitor", "sequence", "analysis", "throttler", "notification"], "provider": "kstorage", "request": "persist", "payload": {"key": "youruser/1630643468_6-967003_highway4_200-200-400-400_24_769.mp4", "fileSize": 4545863, "is_fragmented": false, "metadata": {"uploadtime": "1630643468", "event-instancename": "highway4", "event-timestamp": "1630643468", "productid": "Bfuk14xm40eMSxwEEyrd908yzmDIwKp5", "event-numberofchanges": "24", "event-microseconds": "0", "event-regioncoordinates": "200-200-400-400", "capture": "IPCamera", "event-token": "0", "publickey": "ABCDEFGHI!@#$%12345"}, "bytes_ranges": "", "bytes_range_on_time": null}, "source": "storj"}
     next..
