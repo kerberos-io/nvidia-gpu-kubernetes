@@ -116,7 +116,9 @@ Make sure the `.json` file is aligned with below config.
 
 ## Create a GPU workload and scale with Kerberos Vault
 
-When creating a new pod or deployment, you assign a number of GPUs to the workload, this will make sure the workload is scheduled on a node which has one or more GPUs available. Magic, all done by the NVIDIA Kubernetes operator. So the conclusion is that you can add as much nodes and GPUs you want, and you can simply increase the `replicas: 1` parameter to the number of GPUs you have available
+When creating a new pod or deployment, you assign a number of GPUs to the workload, this will make sure the workload is scheduled on a node which has one or more GPUs available. Magic, all done by the NVIDIA Kubernetes operator. So the conclusion is that you can add as much nodes and GPUs you want, and you can simply increase the `replicas: 1` parameter to the number of GPUs you have available.
+
+![Integration in practice (Yolov3)](https://user-images.githubusercontent.com/1546779/133740877-a0bc2261-57ad-47b7-ab01-a929329b729a.png)
 
 Once you have created below deployment in your Kubernetes cluster, you will have one or more machine learning workloads integrated with your Kerberos Vault and Kafka broker. Due to the nature of Kafka, and how we designed the Kerberos Enterprise suite, it will also loadbalance or divide and concur the request over your different GPU's. Have some fun ;)
 
