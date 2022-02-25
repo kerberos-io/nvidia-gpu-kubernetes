@@ -41,6 +41,25 @@ Once we have the NVIDIA drivers installed, we are ready to setup Docker and Kube
 Let's install Docker. We could also use `containerd` with Kubernetes.
 
     apt install docker.io -y    
+    
+Once installed modify the cgroup driver, so kubernetes will be using it correctly. By default Kubernetes cgroup driver was set to systems but docker was set to systemd.
+
+    sudo mkdir /etc/docker
+    cat <<EOF | sudo tee /etc/docker/daemon.json
+    {
+      "exec-opts": ["native.cgroupdriver=systemd"],
+      "log-driver": "json-file",
+      "log-opts": {
+        "max-size": "100m"
+      },
+      "storage-driver": "overlay2"
+    }
+    EOF
+
+    sudo systemctl enable docker
+    sudo systemctl daemon-reload
+    sudo systemctl restart docker
+
 
 ### Install Kubernetes
   
