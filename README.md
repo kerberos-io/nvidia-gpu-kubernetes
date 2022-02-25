@@ -126,7 +126,13 @@ Make sure the `.json` file is aligned with below config.
                 "path": "/usr/bin/nvidia-container-runtime",
                 "runtimeArgs": []
             }
-        }
+        },
+        "exec-opts": ["native.cgroupdriver=systemd"],
+        "log-driver": "json-file",
+        "log-opts": {
+            "max-size": "100m"
+        },
+        "storage-driver": "overlay2"
     }
 
 ## Enable NVidia k8s plugin
