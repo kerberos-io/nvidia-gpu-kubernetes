@@ -111,7 +111,7 @@ To enable NVIDIA for Docker, [a couple of things will need to be installed](http
        apt-get update
        apt-get install -y nvidia-docker2
        systemctl restart docker
-       docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi
+       docker run --rm --gpus all nvidia/cuda:11.1.1-base-ubi8 nvidia-smi
    
 Make an additional modification to the `daemon.json` of Docker.
 
