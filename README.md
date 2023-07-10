@@ -20,7 +20,6 @@ To provision GPU worker nodes in a Kubernetes cluster, the following NVIDIA soft
 
 ![GPU-Operator-Manual-Install-Figure](https://user-images.githubusercontent.com/1546779/132136925-7f7a2c88-7d58-41ba-8b8f-8f72b0af82de.png)
 
-
 ## NVidia Drivers
 We are assuming an Ubuntu 20.4 system with a clean installation. First things first, let's go ahead with installing the NVIDIA drivers and CUDA drivers.
 
@@ -135,9 +134,46 @@ Make sure the `.json` file is aligned with below config.
         "storage-driver": "overlay2"
     }
 
-## Enable NVidia k8s plugin
-  
-    kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.9.0/nvidia-device-plugin.yml
+Restart the Docker daemon to complete the installation after setting the default runtime:
+
+    sudo systemctl restart docker
+
+### or Install NVIDIA for containerd
+
+Update containerd to use nvidia as the default runtime and add nvidia runtime configuration. This can be done by adding below config to `/etc/containerd/config.toml` and restarting containerd service.
+
+    version = 2
+    [plugins]
+      [plugins."io.containerd.grpc.v1.cri"]
+        [plugins."io.containerd.grpc.v1.cri".containerd]
+          default_runtime_name = "nvidia"
+    
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+            [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+              privileged_without_host_devices = false
+              runtime_engine = ""
+              runtime_root = ""
+              runtime_type = "io.containerd.runc.v2"
+              [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+                BinaryName = "/usr/bin/nvidia-container-runtime"
+
+Restart the Containerd daemon to complete the installation after setting the default runtime:
+
+    sudo systemctl restart containerd
+
+## Enable NVidia GPU operator
+
+> Find the full tutorial on [the official NVIDIA docs page](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/getting-started.html).
+
+Download the NVIDIA helm chart
+
+    helm repo add nvidia https://helm.ngc.nvidia.com/nvidia && helm repo update
+
+Install the NVIDIA helm chart in the `gpu-operator` namespace.
+
+    helm install --wait --generate-name \
+    -n gpu-operator --create-namespace \
+    nvidia/gpu-operator
 
 ## Create a GPU workload and scale with Kerberos Vault
 
