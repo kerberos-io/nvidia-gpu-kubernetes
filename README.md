@@ -67,9 +67,10 @@ Install the Kubernetes toolset.
 
     apt update -y
     apt install apt-transport-https curl -y
-    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add
-    apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
-    apt update -y && apt install kubeadm kubelet kubectl kubernetes-cni -y
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    apt update -y
+    apt install -y kubeadm=1.28.1-1.1 kubelet=1.28.1-1.1 kubectl=1.28.1-1.1
 
 Disable swap as this is required by Kubernetes.
 
