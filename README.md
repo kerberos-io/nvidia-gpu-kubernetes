@@ -28,8 +28,9 @@ We are assuming an Ubuntu 20.4 system with a clean installation. First things fi
     reboot
     
     sudo -s
-    nvidia-smi
     apt install nvidia-cuda-toolkit
+    apt install nvidia-utils-455
+    nvidia-smi
 
 ## Setup tools
 
